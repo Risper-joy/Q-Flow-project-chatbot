@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+    
+        .header {
+            background-color: red;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+    
+        #chat-box {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #e8f5e9; /* Light green */
+        }
+    
+        .bot-message .message-content {
+            background-color: #c8e6c9; /* Pale green */
+            color: #333;
+        }
+    
+        .user-message .message-content {
+            background-color: red;
+            color: white;
+        }
+    
+        input[type="text"] {
+            width: calc(100% - 70px);
+            padding: 15px;
+            border: none;
+            border-top: 1px solid #ddd;
+            font-size: 16px;
+            outline: none;
+        }
+    
+        button {
+            width: 70px;
+            padding: 15px;
+            background-color: green;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-top: 1px solid #ddd;
+            outline: none;
+        }
+    
+        button:hover {
+            background-color: #006400; /* Dark green */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Huduma Chat
+        </div>
+        <div id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="footer">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('send-btn').addEventListener('click', async () => {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim() === "") return;
+        
+            // Display user's message
+            addMessage(userInput, 'user');
+        
+            // Send user input to Flask backend
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: userInput }),
+            });
+        
+            const data = await response.json();
+        
+            // Display bot's response
+            addMessage(data.response, 'bot');
+            document.getElementById('user-input').value = ''; // Clear input field
+        });
+        
+        // Function to add messages to chat box
+        function addMessage(message, type) {
+            const chatBox = document.getElementById('chat-box');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'user' ? 'message user-message' : 'message bot-message';
+        
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = message;
+        
+            messageDiv.appendChild(messageContent);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>

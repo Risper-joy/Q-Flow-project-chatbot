@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/tickets.css">
+    <title>Q-FLOW - Tickets</title>
+</head>
+<body>
+    <div class="container-1">
+        <div class="index-container">
+            <aside>
+                <a class="index-toggle" href="index.html">
+                    <div class="logo">
+                        <h2>Q-<span class="danger">FLOW</span></h2>
+                    </div>
+                </a>
+            </aside>
+        </div>
+    <main>
+        <div class="dash-container">
+            <h2>Tickets Page</h2>
+        </div>
+
+        <div class="tickets-content">
+            <section>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="board board-body bg-primary text-white mb-3">
+                            <div class="ticket-details">
+                                <div>
+                                    <div class="status">
+                                        <div class="ticket">
+                                            <h3>Your ticket number is:</h3>
+                                            <h2>Ticket Number: {{ ticket_number }}</h2>
+                                        </div>
+                                        <div class="ticket-info">
+                                            <div class="room-info">
+                                                <h3>Booth: {{ booth }}</h3> <!-- Displaying booth from backend -->
+                                            </div>
+                                            <div class="time-info">
+                                                <h3>Ticketing time: <time>{{ created_at }}</time></h3> <!-- Displaying created_at from backend -->
+                                            </div>
+                                        </div>
+                                        <div class="ticket-button">
+                                            <form action="{{ url_for('ticket_status', ticket_number=ticket_number) }}" method="get">
+                                                <button class="buttonish" role="button">Check Status</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
